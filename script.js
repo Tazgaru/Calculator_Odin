@@ -1,10 +1,12 @@
 const calcScreen = document.querySelector('.calc-screen');
 const resultScreen = document.querySelector('.result-screen');
-const btns = document.querySelectorAll('.buttons .num, .operator');
+const numBtns = document.querySelectorAll('.buttons .num');
+const operatorBtns = document.querySelectorAll('.operator');
 const clearBtn = document.querySelector('.clear');
 const equalBtn = document.querySelector('.equal');
 
-btns.forEach(btn => btn.addEventListener('click', displayValue));
+numBtns.forEach(btn => btn.addEventListener('click', displayNum));
+operatorBtns.forEach(btn => btn.addEventListener('click', displayOperator));
 clearBtn.addEventListener('click', clearCalc);
 equalBtn.addEventListener('click', getResult);
 
@@ -22,13 +24,27 @@ function operate(num1, num2, operator){
     }else if (operator == '/') {
         return num1 / num2;
 
-    }else {
+    }else {const operatorBtns = document.querySelectorAll('.buttons .num, .operator');
         console.log('Unrecognized operator');
     }
 }
 
-function displayValue() {
+function displayNum() {
     calcScreen.textContent += this.textContent;
+}
+
+function displayOperator() {
+    let currentValue = calcScreen.textContent;
+    // -3 because of 2 added spaces in textContent of operators
+    let lastEntry = currentValue.slice(currentValue.length - 3);
+
+    if (lastEntry == ' + ' || lastEntry == ' - ' || lastEntry == ' * ' || lastEntry == ' / ' && currentValue != ''){
+        let currentContent = calcScreen.textContent;
+        calcScreen.textContent = currentContent.substring(0, currentContent.length - 3);
+        calcScreen.textContent += this.textContent;
+    }else {
+        calcScreen.textContent += this.textContent;
+    }
 }
 
 function clearCalc() {
